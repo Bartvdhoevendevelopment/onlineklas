@@ -2,6 +2,7 @@
 // Typ een reeks woorden zo snel mogelijk. 5 niveaus (groep 4 t/m 8).
 
 import { WOORDEN } from "./words.js";
+import { SUPABASE_URL, SUPABASE_ANON_KEY } from "./config.js";
 
 const AANTAL_WOORDEN = 30;
 const MAX_HIGHSCORES = 100;
@@ -86,10 +87,61 @@ function scoreToevoegen(groep, naam, tijdMs) {
   return positie;
 }
 
-function haaltTop100(groep, tijdMs) {
-  const scores = scoresLaden(groep);
-  if (scores.length < MAX_HIGHSCORES) return true;
-  return tijdMs < scores[scores.length - 1].tijdMs;
+// ---------- Online database (Supabase) ----------
+// Als config.js is ingevuld, delen alle bezoekers dezelfde highscores.
+// Lukt een database-actie niet (offline, storing), dan valt het spel
+// stilletjes terug op de lijst op de eigen computer.
+
+function dbActief() {
+  return Boolean(SUPABASE_URL && SUPABASE_ANON_KEY);
+}
+
+function dbHeaders() {
+  return {
+    apikey: SUPABASE_ANON_KEY,
+    Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+    "Content-Type": "application/json"
+  };
+}
+
+async function dbTop100(groep) {
+  const url = `${SUPABASE_URL}/rest/v1/highscores` +
+    `?groep=eq.${groep}&select=naam,tijd_ms,datum&order=tijd_ms.asc&limit=${MAX_HIGHSCORES}`;
+  const antwoord = await fetch(url, { headers: dbHeaders() });
+  if (!antwoord.ok) throw new Error(`Database-fout ${antwoord.status}`);
+  const rijen = await antwoord.json();
+  return rijen.map((r) => ({ naam: r.naam, tijdMs: r.tijd_ms, datum: r.datum }));
+}
+
+async function dbToevoegen(groep, naam, tijdMs) {
+  const antwoord = await fetch(`${SUPABASE_URL}/rest/v1/highscores`, {
+    method: "POST",
+    headers: dbHeaders(),
+    body: JSON.stringify({ groep, naam, tijd_ms: tijdMs })
+  });
+  if (!antwoord.ok) throw new Error(`Database-fout ${antwoord.status}`);
+
+  // Positie bepalen: aantal snellere tijden + 1.
+  const telling = await fetch(
+    `${SUPABASE_URL}/rest/v1/highscores?groep=eq.${groep}&tijd_ms=lt.${tijdMs}&select=id`,
+    { method: "HEAD", headers: { ...dbHeaders(), Prefer: "count=exact" } }
+  );
+  const bereik = telling.headers.get("content-range") || "";
+  const aantalSneller = parseInt(bereik.split("/")[1], 10);
+  const positie = Number.isFinite(aantalSneller) ? aantalSneller + 1 : null;
+  return positie !== null && positie <= MAX_HIGHSCORES ? positie : positie;
+}
+
+// Haalt de top 100 op: online als het kan, anders lokaal.
+async function haalScores(groep) {
+  if (dbActief()) {
+    try {
+      return await dbTop100(groep);
+    } catch {
+      /* database niet bereikbaar — val terug op lokaal */
+    }
+  }
+  return scoresLaden(groep);
 }
 
 // ---------- Spelstatus ----------
@@ -218,7 +270,7 @@ function controleerInvoer() {
   invoer.classList.toggle("fout", foutGetypt);
 }
 
-function eindeSpel() {
+async function eindeSpel() {
   timerLoopt = false;
   eindTijdMs = performance.now() - startTijd;
   $("stopwatch").textContent = formatTijd(eindTijdMs);
@@ -227,7 +279,9 @@ function eindeSpel() {
   $("einde-tijd").textContent = `${formatTijd(eindTijdMs)} sec`;
 
   // Niet automatisch opslaan: de speler kiest zelf (opslaan / opnieuw / menu).
-  const inTop = haaltTop100(huidigeGroep, eindTijdMs);
+  const scores = await haalScores(huidigeGroep);
+  const inTop = scores.length < MAX_HIGHSCORES ||
+    eindTijdMs < scores[scores.length - 1].tijdMs;
   $("btn-opslaan").classList.toggle("hidden", !inTop);
   if (inTop) {
     $("einde-positie").textContent = `Goed gedaan, ${spelerNaam}! Wil je deze tijd opslaan in de top 100 van groep ${huidigeGroep}?`;
@@ -242,21 +296,42 @@ function eindeSpel() {
   }
 }
 
-function tijdOpslaan() {
-  laatstePositie = scoreToevoegen(huidigeGroep, spelerNaam, Math.round(eindTijdMs));
+async function tijdOpslaan() {
+  const knop = $("btn-opslaan");
+  knop.disabled = true;
+  knop.textContent = "Bezig...";
+  const tijd = Math.round(eindTijdMs);
+
+  if (dbActief()) {
+    try {
+      laatstePositie = await dbToevoegen(huidigeGroep, spelerNaam, tijd);
+    } catch {
+      laatstePositie = scoreToevoegen(huidigeGroep, spelerNaam, tijd);
+    }
+  } else {
+    laatstePositie = scoreToevoegen(huidigeGroep, spelerNaam, tijd);
+  }
+
+  knop.disabled = false;
+  knop.textContent = "💾 Tijd opslaan";
   toonHighscores(huidigeGroep, laatstePositie);
 }
 
 // ---------- Highscores ----------
 
-function toonHighscores(groep, markeerPositie = null) {
+async function toonHighscores(groep, markeerPositie = null) {
   huidigeGroep = groep;
   $("hs-titelbalk").textContent = `Onlineklas.nl — Highscores Groep ${groep}`;
   $("hs-kop").textContent = `Highscores — Groep ${groep}`;
 
-  const scores = scoresLaden(groep);
   const body = $("hs-body");
   body.innerHTML = "";
+  $("hs-leeg").textContent = "Laden...";
+  $("hs-leeg").classList.remove("hidden");
+  toonScherm("scherm-highscores");
+
+  const scores = await haalScores(groep);
+  $("hs-leeg").textContent = "Nog geen scores. Wees de eerste Woordenkampioen!";
   $("hs-leeg").classList.toggle("hidden", scores.length > 0);
 
   scores.forEach((s, i) => {
@@ -276,7 +351,6 @@ function toonHighscores(groep, markeerPositie = null) {
     body.appendChild(tr);
   });
 
-  toonScherm("scherm-highscores");
   if (markeerPositie !== null) {
     const rij = body.children[markeerPositie - 1];
     if (rij) rij.scrollIntoView({ block: "center" });
