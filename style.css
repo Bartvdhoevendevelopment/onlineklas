@@ -195,7 +195,8 @@ button:focus-visible { outline: 1px dotted #000; }
   padding: 30px 10px;
   margin-bottom: 18px;
   min-height: 130px;
-  word-break: break-all;
+  white-space: nowrap;
+  overflow: hidden;
   line-height: 1.1;
 }
 

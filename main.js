@@ -189,6 +189,7 @@ function startVoorbereiding() {
   timerLoopt = false;
   $("spel-titelbalk").textContent = `Woordenkampioen — Groep ${huidigeGroep}`;
   $("stopwatch").textContent = "0,000";
+  $("woord").style.fontSize = "";
   $("voortgang-balk").style.width = "0%";
   $("woord").textContent = " ";
   $("invoer").value = "";
@@ -210,6 +211,7 @@ function startSpel() {
   let teller = 3;
   const stap = () => {
     if (teller > 0) {
+      $("woord").style.fontSize = "";
       $("woord").textContent = String(teller);
       $("woord").classList.add("aftellen");
       teller--;
@@ -230,10 +232,27 @@ function startSpel() {
 
 function toonWoord() {
   $("woord").textContent = woorden[woordIndex];
+  pasWoordGrootteAan();
   $("voortgang-balk").style.width = `${(woordIndex / AANTAL_WOORDEN) * 100}%`;
   $("invoer").value = "";
   $("invoer").classList.remove("fout");
 }
+
+// Verkleint het lettertype van lange woorden tot ze in het vak passen
+// (bijv. "verantwoordelijkheid" in groep 8).
+function pasWoordGrootteAan() {
+  const el = $("woord");
+  el.style.fontSize = ""; // begin weer op de normale grootte
+  let maat = parseFloat(getComputedStyle(el).fontSize);
+  while (el.scrollWidth > el.clientWidth && maat > 18) {
+    maat -= 2;
+    el.style.fontSize = `${maat}px`;
+  }
+}
+
+window.addEventListener("resize", () => {
+  if (timerLoopt) pasWoordGrootteAan();
+});
 
 function flitsRood() {
   const flash = $("flash");
