@@ -1,0 +1,638 @@
+/* Onlineklas.nl — Woordenkampioen — Windows 95 retro stijl */
+
+:root {
+  --win-gray: #c0c0c0;
+  --win-dark: #808080;
+  --win-darker: #404040;
+  --win-light: #dfdfdf;
+  --win-white: #ffffff;
+  --title-blue1: #000080;
+  --title-blue2: #1084d0;
+  --desktop-teal: #008080;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+}
+
+body {
+  background: var(--desktop-teal);
+  font-family: Tahoma, "MS Sans Serif", "Segoe UI", Verdana, sans-serif;
+  font-size: 13px;
+  color: #000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px 12px 48px;
+}
+
+/* ---------- Venster (Windows 95 raam) ---------- */
+.window {
+  background: var(--win-gray);
+  border: 2px solid;
+  border-color: var(--win-light) var(--win-darker) var(--win-darker) var(--win-light);
+  box-shadow: 1px 1px 0 #000;
+  width: 100%;
+  max-width: 760px;
+  margin-bottom: 20px;
+}
+
+.title-bar {
+  background: linear-gradient(90deg, var(--title-blue1), var(--title-blue2));
+  color: #fff;
+  font-weight: bold;
+  padding: 3px 4px 3px 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  user-select: none;
+}
+
+.title-bar .buttons { display: flex; gap: 2px; }
+
+.tb-btn {
+  width: 18px;
+  height: 16px;
+  background: var(--win-gray);
+  border: 1px solid;
+  border-color: var(--win-white) var(--win-darker) var(--win-darker) var(--win-white);
+  font-size: 10px;
+  font-weight: bold;
+  line-height: 12px;
+  text-align: center;
+  color: #000;
+  cursor: default;
+}
+
+.window-body { padding: 16px; }
+
+/* ---------- Knoppen ---------- */
+button, .btn {
+  font-family: inherit;
+  font-size: 13px;
+  background: var(--win-gray);
+  border: 2px solid;
+  border-color: var(--win-white) var(--win-darker) var(--win-darker) var(--win-white);
+  padding: 6px 16px;
+  cursor: pointer;
+  outline-offset: -5px;
+}
+
+button:active {
+  border-color: var(--win-darker) var(--win-white) var(--win-white) var(--win-darker);
+}
+
+button:focus-visible { outline: 1px dotted #000; }
+
+.btn-big {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.btn-menu {
+  display: block;
+  width: 100%;
+  padding: 14px;
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 12px;
+}
+
+/* ---------- Homepagina ---------- */
+.logo {
+  text-align: center;
+  margin: 8px 0 4px;
+  font-size: 40px;
+  font-weight: bold;
+  color: var(--title-blue1);
+  text-shadow: 2px 2px 0 var(--win-white), 3px 3px 0 var(--win-dark);
+  letter-spacing: 1px;
+}
+
+.subtitle {
+  text-align: center;
+  margin: 0 0 18px;
+  font-size: 15px;
+}
+
+.marquee-wrap {
+  background: #000080;
+  color: #ffff00;
+  font-weight: bold;
+  padding: 4px 0;
+  overflow: hidden;
+  white-space: nowrap;
+  border: 2px solid;
+  border-color: var(--win-darker) var(--win-white) var(--win-white) var(--win-darker);
+  margin-bottom: 16px;
+}
+
+.marquee-inner {
+  display: inline-block;
+  padding-left: 100%;
+  animation: marquee 18s linear infinite;
+}
+
+@keyframes marquee {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-100%); }
+}
+
+/* ---------- Spelscherm ---------- */
+.stopwatch {
+  font-family: "Courier New", monospace;
+  font-size: 44px;
+  font-weight: bold;
+  text-align: center;
+  background: #000;
+  color: #00ff00;
+  border: 2px solid;
+  border-color: var(--win-darker) var(--win-white) var(--win-white) var(--win-darker);
+  padding: 8px 4px;
+  margin: 0 auto 14px;
+  max-width: 340px;
+  letter-spacing: 2px;
+}
+
+.progress-text {
+  text-align: center;
+  font-size: 15px;
+  margin-bottom: 6px;
+}
+
+.progress-track {
+  background: var(--win-white);
+  border: 2px solid;
+  border-color: var(--win-darker) var(--win-white) var(--win-white) var(--win-darker);
+  height: 20px;
+  margin: 0 auto 18px;
+  max-width: 420px;
+  padding: 2px;
+}
+
+.progress-fill {
+  background: var(--title-blue1);
+  height: 100%;
+  width: 0%;
+}
+
+.word-display {
+  text-align: center;
+  font-family: "Courier New", monospace;
+  font-size: 64px;
+  font-weight: bold;
+  background: var(--win-white);
+  border: 2px solid;
+  border-color: var(--win-darker) var(--win-white) var(--win-white) var(--win-darker);
+  padding: 30px 10px;
+  margin-bottom: 18px;
+  min-height: 130px;
+  word-break: break-all;
+  line-height: 1.1;
+}
+
+@media (max-width: 600px) {
+  .word-display { font-size: 40px; }
+}
+
+.type-input {
+  display: block;
+  width: 100%;
+  max-width: 520px;
+  margin: 0 auto 14px;
+  font-family: "Courier New", monospace;
+  font-size: 34px;
+  text-align: center;
+  padding: 10px;
+  border: 2px solid;
+  border-color: var(--win-darker) var(--win-white) var(--win-white) var(--win-darker);
+  background: var(--win-white);
+}
+
+.type-input:focus { outline: 2px solid var(--title-blue2); }
+
+.type-input.fout { color: #cc0000; }
+
+.word-display.aftellen {
+  color: var(--title-blue1);
+  font-size: 90px;
+}
+
+.game-info {
+  text-align: center;
+  font-size: 14px;
+  margin-bottom: 14px;
+}
+
+.fouten { color: #aa0000; font-weight: bold; }
+
+/* ---------- Rode fout-flits ---------- */
+#flash {
+  position: fixed;
+  inset: 0;
+  background: #ff0000;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 999;
+}
+
+#flash.flash-on {
+  animation: flitser 0.22s ease-out;
+}
+
+@keyframes flitser {
+  0%   { opacity: 0.85; }
+  100% { opacity: 0; }
+}
+
+/* ---------- Highscores ---------- */
+.hs-table-wrap {
+  max-height: 420px;
+  overflow-y: auto;
+  border: 2px solid;
+  border-color: var(--win-darker) var(--win-white) var(--win-white) var(--win-darker);
+  background: var(--win-white);
+  margin-bottom: 14px;
+}
+
+table.hs-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.hs-table th {
+  background: var(--win-gray);
+  border-bottom: 2px solid var(--win-dark);
+  padding: 5px 8px;
+  text-align: left;
+  position: sticky;
+  top: 0;
+}
+
+.hs-table td {
+  padding: 4px 8px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.hs-table tr.mijn-score td {
+  background: #ffff99;
+  font-weight: bold;
+}
+
+.hs-table tr:nth-child(1) td { background: #ffe08a; }
+.hs-table tr:nth-child(2) td { background: #e8e8e8; }
+.hs-table tr:nth-child(3) td { background: #f5cfa0; }
+.hs-table tr.mijn-score td { background: #ffff99 !important; }
+
+.leeg-melding {
+  text-align: center;
+  padding: 30px 10px;
+  color: var(--win-dark);
+}
+
+/* ---------- Einde / dialoog ---------- */
+.dialog-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 500;
+}
+
+.dialog {
+  background: var(--win-gray);
+  border: 2px solid;
+  border-color: var(--win-light) var(--win-darker) var(--win-darker) var(--win-light);
+  box-shadow: 2px 2px 0 #000;
+  width: 92%;
+  max-width: 420px;
+}
+
+.dialog .window-body { text-align: center; }
+
+.eind-tijd {
+  font-family: "Courier New", monospace;
+  font-size: 38px;
+  font-weight: bold;
+  color: var(--title-blue1);
+  margin: 10px 0;
+}
+
+.naam-input {
+  font-family: inherit;
+  font-size: 16px;
+  padding: 6px 10px;
+  border: 2px solid;
+  border-color: var(--win-darker) var(--win-white) var(--win-white) var(--win-darker);
+  background: var(--win-white);
+  width: 80%;
+  margin: 10px 0 14px;
+  text-align: center;
+}
+
+/* ---------- Overig ---------- */
+.center { text-align: center; }
+.hidden { display: none !important; }
+
+.knoppenrij {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+.footer {
+  color: #d0f0f0;
+  font-size: 11px;
+  text-align: center;
+  margin-top: 4px;
+}
+
+.groep-kop {
+  text-align: center;
+  font-size: 26px;
+  font-weight: bold;
+  margin: 4px 0 16px;
+  color: var(--title-blue1);
+}
+
+fieldset {
+  border: 2px groove var(--win-light);
+  margin: 0 0 14px;
+  padding: 10px 14px 14px;
+}
+
+legend { font-weight: bold; padding: 0 6px; }
+
+.stijl-rij button.actief { font-weight: bold; }
+
+.tip-regel { font-size: 11px; color: #404040; }
+
+body.thema-krijtbord .tip-regel { color: #e8e8dd; }
+
+body.thema-school .tip-regel { color: #7a5c00; }
+
+/* ============================================================
+   THEMA: SCHOOLSITE 2005 — felle kleuren, Comic Sans, ronde hoeken
+   ============================================================ */
+
+body.thema-school {
+  background: #ffdd55;
+  background-image: repeating-linear-gradient(45deg, #ffdd55 0, #ffdd55 28px, #ffd23f 28px, #ffd23f 56px);
+  font-family: "Comic Sans MS", "Comic Sans", "Chalkboard SE", cursive;
+}
+
+body.thema-school .window,
+body.thema-school .dialog {
+  background: #ffffff;
+  border: 4px solid #3366cc;
+  border-radius: 16px;
+  box-shadow: 5px 5px 0 rgba(0, 0, 51, 0.35);
+  overflow: hidden;
+}
+
+body.thema-school .title-bar {
+  background: linear-gradient(180deg, #ff9933, #ff6600);
+  border-bottom: 3px solid #cc5200;
+  font-size: 15px;
+  text-shadow: 1px 1px 0 #994400;
+}
+
+body.thema-school .tb-btn { display: none; }
+
+body.thema-school .logo {
+  color: #ff6600;
+  text-shadow: 2px 2px 0 #ffffff, 4px 4px 0 #3366cc;
+  transform: rotate(-2deg);
+}
+
+body.thema-school button {
+  background: linear-gradient(180deg, #6699ff, #3366cc);
+  color: #ffffff;
+  border: 3px solid #003399;
+  border-radius: 12px;
+  text-shadow: 1px 1px 0 #003399;
+}
+
+body.thema-school button:active {
+  background: linear-gradient(180deg, #3366cc, #6699ff);
+  border-color: #002266;
+}
+
+body.thema-school .btn-menu:nth-of-type(odd) {
+  background: linear-gradient(180deg, #ff6666, #cc2222);
+  border-color: #991111;
+  text-shadow: 1px 1px 0 #991111;
+}
+
+body.thema-school .btn-menu:nth-of-type(odd):active {
+  background: linear-gradient(180deg, #cc2222, #ff6666);
+}
+
+body.thema-school .marquee-wrap {
+  background: #33cc33;
+  color: #ffffff;
+  border: 3px solid #229922;
+  border-radius: 10px;
+}
+
+body.thema-school fieldset {
+  border: 3px dashed #ff6600;
+  border-radius: 12px;
+}
+
+body.thema-school legend { color: #3366cc; font-size: 15px; }
+
+body.thema-school .word-display {
+  background: #fffbe6;
+  border: 4px solid #ff6600;
+  border-radius: 16px;
+  color: #003399;
+}
+
+body.thema-school .type-input {
+  border: 4px solid #3366cc;
+  border-radius: 12px;
+  background: #ffffff;
+}
+
+body.thema-school .stopwatch {
+  border: 4px solid #cc2222;
+  border-radius: 12px;
+}
+
+body.thema-school .progress-track {
+  border: 2px solid #3366cc;
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+body.thema-school .progress-fill { background: #33cc33; }
+
+body.thema-school .hs-table-wrap {
+  border: 3px solid #3366cc;
+  border-radius: 12px;
+}
+
+body.thema-school .hs-table th {
+  background: #6699ff;
+  color: #ffffff;
+  border-bottom: 3px solid #3366cc;
+}
+
+body.thema-school .word-display.aftellen { color: #ff6600; }
+
+body.thema-school .groep-kop { color: #ff6600; }
+
+body.thema-school .footer { color: #7a5c00; }
+
+body.thema-school .naam-input {
+  border: 3px solid #3366cc;
+  border-radius: 10px;
+}
+
+/* ============================================================
+   THEMA: KRIJTBORD-KLAS — groen bord, houten rand, krijtletters
+   ============================================================ */
+
+body.thema-krijtbord {
+  background: #8b5a2b;
+  background-image: repeating-linear-gradient(90deg, #8b5a2b 0, #96652f 60px, #8b5a2b 120px);
+  font-family: "Comic Sans MS", "Comic Sans", "Chalkboard SE", cursive;
+  color: #f5f5ef;
+}
+
+body.thema-krijtbord .window,
+body.thema-krijtbord .dialog {
+  background: #2e5d3f;
+  border: 10px solid #a0692f;
+  border-radius: 6px;
+  box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.35), 4px 4px 8px rgba(0, 0, 0, 0.4);
+  color: #f5f5ef;
+}
+
+body.thema-krijtbord .title-bar {
+  background: #24492f;
+  border-bottom: 2px dashed rgba(245, 245, 239, 0.6);
+  color: #f5f5ef;
+  text-shadow: none;
+}
+
+body.thema-krijtbord .tb-btn { display: none; }
+
+body.thema-krijtbord .logo {
+  color: #ffffff;
+  text-shadow: none;
+  text-decoration: underline wavy rgba(255, 255, 255, 0.6);
+}
+
+body.thema-krijtbord .subtitle { color: #e8e8dd; }
+
+body.thema-krijtbord button {
+  background: transparent;
+  color: #ffffff;
+  border: 2px dashed rgba(255, 255, 255, 0.85);
+  border-radius: 8px;
+}
+
+body.thema-krijtbord button:active {
+  background: rgba(255, 255, 255, 0.15);
+  border-style: solid;
+}
+
+body.thema-krijtbord .marquee-wrap {
+  background: rgba(0, 0, 0, 0.25);
+  color: #ffee88;
+  border: 2px dashed rgba(255, 255, 255, 0.5);
+}
+
+body.thema-krijtbord fieldset {
+  border: 2px dashed rgba(255, 255, 255, 0.6);
+  border-radius: 8px;
+}
+
+body.thema-krijtbord legend { color: #ffee88; }
+
+body.thema-krijtbord .word-display {
+  background: rgba(0, 0, 0, 0.15);
+  border: 2px dashed rgba(255, 255, 255, 0.7);
+  border-radius: 8px;
+  color: #ffffff;
+}
+
+body.thema-krijtbord .type-input {
+  background: rgba(0, 0, 0, 0.25);
+  border: 2px dashed rgba(255, 255, 255, 0.7);
+  border-radius: 8px;
+  color: #ffffff;
+}
+
+body.thema-krijtbord .type-input.fout { color: #ff8888; }
+
+body.thema-krijtbord .type-input::placeholder { color: rgba(255, 255, 255, 0.5); }
+
+body.thema-krijtbord .stopwatch {
+  background: rgba(0, 0, 0, 0.45);
+  border: 2px solid #a0692f;
+  color: #aaffaa;
+}
+
+body.thema-krijtbord .progress-track {
+  background: rgba(0, 0, 0, 0.25);
+  border: 2px dashed rgba(255, 255, 255, 0.5);
+}
+
+body.thema-krijtbord .progress-fill { background: rgba(255, 255, 255, 0.85); }
+
+body.thema-krijtbord .hs-table-wrap {
+  background: rgba(0, 0, 0, 0.2);
+  border: 2px dashed rgba(255, 255, 255, 0.6);
+}
+
+body.thema-krijtbord .hs-table th {
+  background: #24492f;
+  color: #ffee88;
+  border-bottom: 2px dashed rgba(255, 255, 255, 0.5);
+}
+
+body.thema-krijtbord .hs-table td { border-bottom: 1px solid rgba(255, 255, 255, 0.2); }
+
+body.thema-krijtbord .hs-table tr:nth-child(1) td,
+body.thema-krijtbord .hs-table tr:nth-child(2) td,
+body.thema-krijtbord .hs-table tr:nth-child(3) td { background: rgba(255, 255, 255, 0.12); }
+
+body.thema-krijtbord .hs-table tr.mijn-score td {
+  background: rgba(255, 238, 136, 0.3) !important;
+  color: #ffee88;
+}
+
+body.thema-krijtbord .leeg-melding { color: #e8e8dd; }
+
+body.thema-krijtbord .word-display.aftellen { color: #ffee88; }
+
+body.thema-krijtbord .groep-kop { color: #ffee88; }
+
+body.thema-krijtbord .eind-tijd { color: #ffee88; }
+
+body.thema-krijtbord .naam-input {
+  background: rgba(0, 0, 0, 0.25);
+  border: 2px dashed rgba(255, 255, 255, 0.7);
+  border-radius: 8px;
+  color: #ffffff;
+}
+
+body.thema-krijtbord .footer { color: #f0e0c8; }
+
+body.thema-krijtbord .dialog-overlay { background: rgba(0, 0, 0, 0.5); }

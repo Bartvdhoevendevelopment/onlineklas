@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Onlineklas.nl — Woordenkampioen</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+
+  <!-- Rode flits bij fout -->
+  <div id="flash"></div>
+
+  <!-- ===================== HOME ===================== -->
+  <div class="window" id="scherm-home">
+    <div class="title-bar">
+      <span>Onlineklas.nl — Woordenkampioen</span>
+      <span class="buttons"><span class="tb-btn">_</span><span class="tb-btn">□</span><span class="tb-btn">×</span></span>
+    </div>
+    <div class="window-body">
+      <div class="logo">Onlineklas.nl</div>
+      <p class="subtitle">Woordenkampioen — typ de woorden zo snel als je kunt!</p>
+      <div class="marquee-wrap">
+        <span class="marquee-inner">★ ★ ★ Welkom bij Onlineklas.nl! Kies je groep, klik op Spelen en word de Woordenkampioen van jouw klas! ★ ★ ★</span>
+      </div>
+      <fieldset>
+        <legend>Kies je groep</legend>
+        <button class="btn-menu" data-groep="4">Groep 4</button>
+        <button class="btn-menu" data-groep="5">Groep 5</button>
+        <button class="btn-menu" data-groep="6">Groep 6</button>
+        <button class="btn-menu" data-groep="7">Groep 7</button>
+        <button class="btn-menu" data-groep="8">Groep 8</button>
+      </fieldset>
+      <fieldset>
+        <legend>Kies je stijl</legend>
+        <div class="knoppenrij stijl-rij">
+          <button data-thema="win95">🖥️ Windows 95</button>
+          <button data-thema="school">🎨 Schoolsite 2005</button>
+          <button data-thema="krijtbord">🧑‍🏫 Krijtbord</button>
+        </div>
+      </fieldset>
+      <p class="center tip-regel">Tip: typ het woord goed en je gaat vanzelf door naar het volgende!</p>
+    </div>
+  </div>
+
+  <!-- ===================== GROEP-MENU ===================== -->
+  <div class="window hidden" id="scherm-groep">
+    <div class="title-bar">
+      <span id="groep-titelbalk">Groep</span>
+      <span class="buttons"><span class="tb-btn">_</span><span class="tb-btn">□</span><span class="tb-btn">×</span></span>
+    </div>
+    <div class="window-body">
+      <div class="groep-kop" id="groep-kop">Groep 4</div>
+      <button class="btn-big" id="btn-spelen">▶ Spelen</button>
+      <button class="btn-big" id="btn-highscores">🏆 Highscores</button>
+      <div class="knoppenrij">
+        <button id="btn-terug-home">◀ Terug naar hoofdmenu</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== SPEL ===================== -->
+  <div class="window hidden" id="scherm-spel">
+    <div class="title-bar">
+      <span id="spel-titelbalk">Woordenkampioen</span>
+      <span class="buttons"><span class="tb-btn">_</span><span class="tb-btn">□</span><span class="tb-btn">×</span></span>
+    </div>
+    <div class="window-body">
+      <div class="stopwatch" id="stopwatch">0,000</div>
+      <div class="progress-track"><div class="progress-fill" id="voortgang-balk"></div></div>
+      <div class="word-display" id="woord">&nbsp;</div>
+      <input type="text" class="type-input" id="invoer" autocomplete="off" autocapitalize="off"
+             autocorrect="off" spellcheck="false" placeholder="typ hier...">
+      <div class="knoppenrij">
+        <button id="btn-stoppen">■ Stoppen</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== KLAAR-VOOR-DE-START ===================== -->
+  <div class="dialog-overlay hidden" id="dialog-start">
+    <div class="dialog">
+      <div class="title-bar"><span>Klaar voor de start?</span></div>
+      <div class="window-body">
+        <p id="start-uitleg">Typ de woorden zo snel als je kunt.<br>Het spel gaat vanzelf door naar het volgende woord.<br>Na het aftellen (3... 2... 1...) start de stopwatch!</p>
+        <p><b>Wat is je naam?</b></p>
+        <input type="text" class="naam-input" id="naam-invoer" maxlength="20" placeholder="Jouw naam">
+        <button class="btn-big" id="btn-start" style="max-width:220px; margin:0 auto;">START!</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== EINDE / NAAM ===================== -->
+  <div class="dialog-overlay hidden" id="dialog-einde">
+    <div class="dialog">
+      <div class="title-bar"><span>Gefeliciteerd!</span></div>
+      <div class="window-body">
+        <p id="einde-tekst">Je hebt alle woorden getypt!</p>
+        <div class="eind-tijd" id="einde-tijd">0,000 sec</div>
+        <p id="einde-positie"></p>
+        <div class="knoppenrij">
+          <button id="btn-opslaan">💾 Tijd opslaan</button>
+          <button id="btn-opnieuw">🔁 Opnieuw doen</button>
+          <button id="btn-einde-menu">◀ Menu</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== HIGHSCORES ===================== -->
+  <div class="window hidden" id="scherm-highscores">
+    <div class="title-bar">
+      <span id="hs-titelbalk">Highscores</span>
+      <span class="buttons"><span class="tb-btn">_</span><span class="tb-btn">□</span><span class="tb-btn">×</span></span>
+    </div>
+    <div class="window-body">
+      <div class="groep-kop" id="hs-kop">Highscores — Groep 4</div>
+      <div class="hs-table-wrap">
+        <table class="hs-table">
+          <thead>
+            <tr><th>#</th><th>Naam</th><th>Tijd</th><th>Datum</th></tr>
+          </thead>
+          <tbody id="hs-body"></tbody>
+        </table>
+        <div class="leeg-melding hidden" id="hs-leeg">Nog geen scores. Wees de eerste Woordenkampioen!</div>
+      </div>
+      <div class="knoppenrij">
+        <button id="btn-hs-spelen">▶ Spelen</button>
+        <button id="btn-hs-terug">◀ Terug naar groepsmenu</button>
+        <button id="btn-hs-home">🏠 Hoofdmenu</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">© Onlineklas.nl — Woordenkampioen · retro editie</div>
+
+  <script type="module" src="./main.js"></script>
+</body>
+</html>
